@@ -1,0 +1,11 @@
+{
+    "name": "Using fixtures to represent data",
+    "email": "hello@cypress.io",
+    "body": "Fixtures are a great way to mock data for responses to routes",
+    "userLogin": "admin@mailinator.com",
+    "userPassword": "userPassword",
+    "baseUrl": "https://dev-api-maxxiforge.appsmaxxidata.com",
+    "env": {
+        "apiUrl": "https://dev-api-maxxiforge.appsmaxxidata.com/api/v1/auth/login?lng=pt-BR"
+    }
+}
