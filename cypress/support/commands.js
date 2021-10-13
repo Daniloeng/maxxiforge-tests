@@ -27,7 +27,7 @@
 Cypress.Commands.add('getToken', (email, password) => {
     cy.request({
             method: 'POST',
-            url: 'https://dev-api-maxxiforge.appsmaxxidata.com/api/v1/auth/login?lng=pt-BR',
+            url: 'http://localhost:8080/api/v1/auth/login?lng=pt-BR',
             body: {
                 userLogin: email,
                 userPassword: password
