@@ -18,16 +18,16 @@ describe("Should test actions in action", () => {
             method: 'POST',
             headers: { Authorization: `Bearer ${token}` },
             body: {
-                actionPlannedDoneTime: "2021-10-15T12:00:00Z",
+                actionPlannedDoneTime: "2021-10-25T12:00:00Z",
                 actionStatus: "PLANEJADA",
                 actionSubject: "Evento como PLANEJADA",
-                actionTypeId: 3,
-                customerId: 17,
+                actionTypeId: 1,
+                customerId: 10,
                 finish: false,
-                locationId: null,
+                locationId: 10,
                 memberId: 7,
-                plannedEndTime: "2021-10-15T13:00:00Z",
-                plannedStartTime: "2021-10-15T12:00:00Z"
+                plannedEndTime: "2021-10-25T13:00:00Z",
+                plannedStartTime: "2021-10-25T12:00:00Z"
             }
         }).as('response');
 
@@ -47,13 +47,13 @@ describe("Should test actions in action", () => {
                 actionPlannedDoneTime: "2021-10-10T12:00:00Z",
                 actionStatus: "NAO_PLANEJADA",
                 actionSubject: "Evento como PLANEJADA",
-                actionTypeId: 3,
-                customerId: 17,
+                actionTypeId: 1,
+                customerId: 10,
                 finish: false,
                 locationId: null,
                 memberId: 7,
-                plannedEndTime: "2021-10-10T13:00:00Z",
-                plannedStartTime: "2021-10-10T12:00:00Z"
+                plannedEndTime: "2021-10-20T13:00:00Z",
+                plannedStartTime: "2021-10-20T12:00:00Z"
             }
         }).as('response');
 
@@ -73,13 +73,13 @@ describe("Should test actions in action", () => {
                 actionPlannedDoneTime: "2021-10-10T12:00:00Z",
                 actionStatus: "REALIZADA",
                 actionSubject: "Evento como REALIZADA",
-                actionTypeId: 3,
-                customerId: 17,
+                actionTypeId: 1,
+                customerId: 10,
                 finish: false,
                 locationId: null,
                 memberId: 7,
-                plannedEndTime: "2021-10-10T12:00:00Z",
-                plannedStartTime: "2021-10-10T12:00:00Z"
+                plannedEndTime: "2021-10-20T12:00:00Z",
+                plannedStartTime: "2021-10-20T12:00:00Z"
             }
         }).as('response');
 
@@ -90,13 +90,39 @@ describe("Should test actions in action", () => {
         });
     });
 
+    it('Should get ', () => {
+        cy.request({
+            url: 'http://localhost:8080/api/v1/actions?lng=pt-BR',
+            method: 'POST',
+            headers: { Authorization: `Bearer ${token}` },
+            body: {
+                actionPlannedDoneTime: "2021-10-10T12:00:00Z",
+                actionStatus: "NAO_PLANEJADA",
+                actionSubject: "Evento como PLANEJADA",
+                actionTypeId: 1,
+                customerId: 10,
+                finish: false,
+                locationId: null,
+                memberId: 7,
+                plannedEndTime: "2021-10-20T13:00:00Z",
+                plannedStartTime: "2021-10-20T12:00:00Z"
+            }
+        }).as('response');
+
+        cy.get('@response').then(res => {
+            expect(res.status).to.be.equal(201),
+                expect(res.body).to.have.property('id'),
+                expect(res.body).to.have.property('actionSubject', 'Evento como PLANEJADA');
+        });
+    });
+
     it('Should update an action', () => {
         cy.request({
-            url: 'http://localhost:8080/api/v1/actions/42?lng=pt-BR',
+            url: 'http://localhost:8080/api/v1/actions/21?lng=pt-BR',
             method: 'PUT',
             headers: { Authorization: `Bearer ${token}` },
             body: {
-                actionPlannedDoneTime: "2021-10-14T12:00:00Z",
+                actionPlannedDoneTime: "2021-10-24T12:00:00Z",
                 actionStatus: "NAO_PLANEJADA",
                 actionSubject: "test api cypress alterada",
                 actionTypeId: 3,
@@ -104,12 +130,24 @@ describe("Should test actions in action", () => {
                 finish: false,
                 locationId: null,
                 memberId: 7,
-                plannedEndTime: "2021-10-14T13:00:00Z",
-                plannedStartTime: "2021-10-14T12:00:00Z"
+                plannedEndTime: "2021-10-24T13:00:00Z",
+                plannedStartTime: "2021-10-24T12:00:00Z"
             }
         }).as('response');
 
         cy.get('@response').its('status').should('be.equal', 200);
+    });
+
+    it('Should search action actionType LIGAÇÃO', () => {
+        cy.request({
+            url: 'http://localhost:8080/api/v1/actions?actionSubject=&actionTypeId=5&active=true&lng=pt-BR',
+            method: 'GET',
+            headers: { Authorization: `Bearer ${token}` },
+        }).as('response');
+
+        cy.get('@response').then(res => {
+            expect(res.status).to.be.equal(201)
+        });
     });
 
 });
